@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class Task2 {
+public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         if (args.length == 0) {
             System.out.println("Укажите имя файла.");
