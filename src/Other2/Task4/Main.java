@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class Task4 {
+public class Main {
 
     public static int func(List<Integer> arr, int sr) {
         int ans = 0;
