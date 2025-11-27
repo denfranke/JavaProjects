@@ -1,34 +1,100 @@
-package Other2;
+package Other2.Task2;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
-        if (args.length == 0) {
-            System.out.println("Укажите имя файла.");
+    public static void main(String[] args) {
+        if (args.length < 2) {
+            System.err.println("Ошибка: требуется два аргумента — пути к двум файлам");
             return;
         }
 
-        String filename = args[0];//"src/Other2/file1.txt"
+        String filename1 = args[0];//"src/Other2/file1.txt"
+        String filename2 = args[1];//"src/Other2/file2.txt"
 
-        Scanner scanner = new Scanner(new File(filename));
-        int centerX = Integer.parseInt(scanner.next());
-        int centerY = Integer.parseInt(scanner.next());
-        int Rx = Integer.parseInt(scanner.next());
-        int Ry = Integer.parseInt(scanner.next());
+        File file1 = new File(filename1);
+        File file2 = new File(filename2);
 
-        filename = args[1];//"src/Other2/file2.txt"
-        scanner = new Scanner(new File(filename));
+        if (!file1.exists()) {
+            System.err.println("Ошибка: не найден  " + filename1);
+            return;
+        }
+        if (!file1.canRead()) {
+            System.err.println("Ошибка: нет доступа для чтения  " + filename1);
+            return;
+        }
 
-        while (scanner.hasNext()) {
-            int x = Integer.parseInt(scanner.next());
-            int y = Integer.parseInt(scanner.next());
+        if (!file2.exists()) {
+            System.err.println("Ошибка: не найден  " + filename2);
+            return;
+        }
+        if (!file2.canRead()) {
+            System.err.println("Ошибка: нет доступа для чтения  " + filename2);
+            return;
+        }
 
-            int position = func(x, y, centerX, centerY, Rx, Ry);
-            System.out.println(position);
+        Scanner scanner;
+        int centerX, centerY, Rx, Ry;
+
+        try {
+            scanner = new Scanner(file1);
+            if (!scanner.hasNextInt()) {
+                System.err.println("Ошибка: в файле " + filename1 + " ожидается целое число (координата центра X)");
+                return;
+            }
+            centerX = scanner.nextInt();
+
+            if (!scanner.hasNextInt()) {
+                System.err.println("Ошибка: в файле " + filename1 + " ожидается целое число (координата центра Y)");
+                return;
+            }
+            centerY = scanner.nextInt();
+
+            if (!scanner.hasNextInt()) {
+                System.err.println("Ошибка: в файле " + filename1 + " ожидается целое число (координаты радиуса X)");
+                return;
+            }
+            Rx = scanner.nextInt();
+
+            if (!scanner.hasNextInt()) {
+                System.err.println("Ошибка: в файле " + filename1 + " ожидается целое число (координаты радиуса Y)");
+                return;
+            }
+            Ry = scanner.nextInt();
+
+            if (Rx <= 0 || Ry <= 0) {
+                System.err.println("Ошибка: отрицательное число");
+                return;
+            }
+        } catch (Exception e) {
+            System.err.println("Ошибка при чтении файла " + filename1 + ": " + e.getMessage());
+            return;
+        }
+
+        try {
+            scanner = new Scanner(file2);
+
+            while (scanner.hasNext()) {
+                if (!scanner.hasNextInt()) {
+                    System.err.println("Ошибка: в файле " + filename2 + " обнаружено нецелое значение (ожидается X)");
+                    scanner.close();
+                    return;
+                }
+                int x = Integer.parseInt(scanner.next());
+
+                if (!scanner.hasNextInt()) {
+                    System.err.println("Ошибка: в файле " + filename2 + " обнаружено нецелое значение (ожидается Y)");
+                    scanner.close();
+                    return;
+                }
+                int y = Integer.parseInt(scanner.next());
+
+                int position = func(x, y, centerX, centerY, Rx, Ry);
+                System.out.println(position);
+            }
+        } catch (Exception e) {
+            System.err.println("Ошибка при чтении файла " + filename2 + ": " + e.getMessage());
         }
     }
 
